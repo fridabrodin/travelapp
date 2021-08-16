@@ -18,6 +18,7 @@ let newDate = d.getMonth()+1+'.'+ d.getDate()+'.'+ d.getFullYear();
 button.addEventListener("click", performAction);
 
 /* Function called by event listener */
+
 function performAction(e){
   const zip =  document.getElementById("zip").value;
   const feelings =  document.getElementById("feelings").value;
@@ -29,6 +30,7 @@ function performAction(e){
   })
 }
 /* Function to GET Web API Data*/
+
 const getWeather = async (baseURL,zip,units,apiKey)=>{
     const res = await fetch(baseURL+zip+units+apiKey)
     try {
@@ -40,6 +42,7 @@ const getWeather = async (baseURL,zip,units,apiKey)=>{
   }
 
 /* Function to POST data */
+
 const postData = async ( url = '', data = {})=>{
   //console.log(data);
     const response = await fetch(url, {
@@ -60,6 +63,7 @@ const postData = async ( url = '', data = {})=>{
 }
 
 /* Function to GET Project Data */
+
 const getData = async (url) => {
   const res = await fetch(url);
   try {
@@ -73,6 +77,7 @@ const getData = async (url) => {
 };
 
 /* Function to update UI */
+
 const updateUI = async () => {
   const request = await fetch('/all');
   try{

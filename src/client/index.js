@@ -1,7 +1,7 @@
-import { performAction } from '.js/app.js'
-import './styles/style.css'
+import { performAction } from './js/formHandler'
+import './styles/style.scss'
 
-//HTML Elements
+//HTML elements
 const button = document.getElementById("generate");
 
 // Event listener to add function to existing HTML DOM element = the generate button
@@ -9,4 +9,4 @@ button.addEventListener("click", performAction);
 
 export {
     performAction
-   }
+}
