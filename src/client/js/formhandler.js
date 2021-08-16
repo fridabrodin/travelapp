@@ -14,8 +14,6 @@ const button = document.getElementById("generate");
 let d = new Date();
 let newDate = d.getMonth()+1+'.'+ d.getDate()+'.'+ d.getFullYear();
 
-// Event listener to add function to existing HTML DOM element = the generate button
-button.addEventListener("click", performAction);
 
 /* Function called by event listener */
 
@@ -93,4 +91,4 @@ const updateUI = async () => {
   }
 }
 
-export { performAction }
+export { performAction, getWeather, postData }

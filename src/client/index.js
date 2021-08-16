@@ -1,12 +1,16 @@
-import { performAction } from './js/formHandler'
+import { performAction, getWeather, postData } from './js/formHandler'
 import './styles/style.scss'
 
-//HTML elements
 const button = document.getElementById("generate");
 
-// Event listener to add function to existing HTML DOM element = the generate button
-button.addEventListener("click", performAction);
+button.addEventListener("click", function(){
+    console.log("I am clicked");
+    performAction();
+ });
+
 
 export {
-    performAction
+    performAction,
+    getWeather,
+    postData
 }
