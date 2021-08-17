@@ -6,11 +6,13 @@ const express = require('express')
 const { response } = require('express');
 const fetch = require("node-fetch");
 const { resolveAny } = require('dns');
+const cors = require('cors');
 
 const app = express()
 
 app.use(express.static('dist'))
 app.use(express.json())
+app.use(cors());
 
 console.log(__dirname)
 
@@ -25,6 +27,7 @@ app.listen(8081, function () {
 
 //------------------------------------------------------------------------------------------------------------------------
 
+
 // What we need to create an URL from the API
 let baseURL = "https://api.meaningcloud.com/sentiment-2.1?key=";
 const apiKey = process.env.API_KEY;
@@ -35,19 +38,9 @@ app.post("/api", (req, res) => {
   console.log("I got a request!");
   console.log(req.body);
 
-  // const results = await fetch(baseURL + apiKey + url + req.body.news + lang);
-  // try {
-  //   const data = await results.json();
-  //   console.log(data);
-  //   res.send(data);
-  // } catch (error) {
-  //   console.log("error:", error);
-  // }
-
 
   fetch(baseURL + apiKey + url + req.body.news + lang)
   .then(res => res.json())
   .then(data => res.send(data));
 }
 );
-
