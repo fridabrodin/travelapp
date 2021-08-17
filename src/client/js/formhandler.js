@@ -25,10 +25,15 @@ async function handleSubmit(event) {
   const res = await fetch("/api", options);
   try {
     const json = await res.json();
+    console.log(json);
+    let lat = json.geonames[0].lat;
+    let long = json.geonames[0].lng;
+    let country = json.geonames[0].countryName;
     //Update the UI with the information sent from the server
-    date.innerHTML = "So, this is what our analyze says about the article:";
-    city.innerHTML = "Agreement: " + json.agreement;
-    temp.innerHTML = "Subjectivity: " + json.subjectivity;
+    date.innerHTML = "Here is some information";
+    city.innerHTML = "Country: " + country;
+    temp.innerHTML = "Long:" + long;
+    content.innerHTML = "Lat:" + lat;
   } catch (error) {
     console.log(error);
   }

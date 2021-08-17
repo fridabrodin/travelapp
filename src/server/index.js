@@ -29,17 +29,16 @@ app.listen(8081, function () {
 
 
 // What we need to create an URL from the API
-let baseURL = "https://api.meaningcloud.com/sentiment-2.1?key=";
-const apiKey = process.env.API_KEY;
-let url = "&url=";
-let lang = "&lang=en";
+let baseURL = "http://api.geonames.org/searchJSON?q=";
+const username = process.env.API_NAME;
+let url = "&maxRows=1&username=";
 
 app.post("/api", (req, res) => {
   console.log("I got a request!");
   console.log(req.body);
 
 
-  fetch(baseURL + apiKey + url + req.body.news + lang)
+  fetch(baseURL + req.body.news + url + username)
   .then(res => res.json())
   .then(data => res.send(data));
 }
