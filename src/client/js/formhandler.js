@@ -1,39 +1,45 @@
 // Our HTML elements
 const date = document.getElementById("date");
-const city = document.getElementById("city");
+const cityName = document.getElementById("city");
 const temp = document.getElementById("temp");
 const content = document.getElementById("content");
-const button = document.getElementById("generate");
+
+//Set value for travel date as the date of today
+document.getElementById("travel-date").valueAsDate = new Date();
 
 async function handleSubmit(event) {
   // event.preventDefault();
-  // check what URL was put into the form field
+
+  // Check what city and travel date was put into the form field
   let news = document.getElementById("name").value;
+  let travelDate = document.getElementById("travel-date").value;
+
   // Client.checkForName(news);
-  // Send the URL to the server with a POST request
-  const article = { news };
+
+  // Send the city and date to the server with a POST request
+  const information = { news, travelDate };
   const options = {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(article),
+    body: JSON.stringify(information),
   }
 
   // Get back the data including the API
   const res = await fetch("/api", options);
   try {
+    //The data we are getting back from the server
     const json = await res.json();
     console.log(json);
-    let lat = json.geonames[0].lat;
-    let long = json.geonames[0].lng;
-    let country = json.geonames[0].countryName;
+    let city = json.data[0].city_name;
+    let description = json.data[0].weather.description;
+
     //Update the UI with the information sent from the server
-    date.innerHTML = "Here is some information";
-    city.innerHTML = "Country: " + country;
-    temp.innerHTML = "Long:" + long;
-    content.innerHTML = "Lat:" + lat;
+    date.innerHTML = "Sounds fun! So, you are going to";
+    cityName.innerHTML = city;
+    temp.innerHTML = "The weather right now is: " + description;
   } catch (error) {
     console.log(error);
   }
@@ -41,3 +47,6 @@ async function handleSubmit(event) {
 }
 
 export { handleSubmit }
+
+
+
