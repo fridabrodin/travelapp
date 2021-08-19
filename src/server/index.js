@@ -21,14 +21,13 @@ app.get('/', function (req, res) {
   res.sendFile('dist/index.html')
 })
 
-// designates what port the app will listen to for incoming requests
 app.listen(8081, function () {
   console.log('Example app listening on port 8081!')
 })
 
 //------------------------------------------------------------------------------------------------------------------------
 
-// Setup empty JS object to act as endpoint for all routes
+// An empty JS object that will hold our data
 let projectData = {};
 
 // What we need to create an URL from the Geonames API
@@ -44,23 +43,23 @@ let longurl = "&lon=";
 const key = "&key=" + process.env.WEATHERBIT_KEY;
 
 // // What we need to create an URL from Pixabay API
-// let base3URL = "https://pixabay.com/api/?key=";
-// const pixKey = "&key=" + process.env.PIXABAY_KEY;
-// let search = "&q=";
-// let photo = "&image_type=photo";
+let base3URL = "https://pixabay.com/api/?key=";
+const pixKey = "&key=" + process.env.PIXABAY_KEY;
+let search = "&q=";
+let photo = "&image_type=photo";
 
-app.post("/api", async(req, res) => {
+app.post("/api", async (req, res) => {
   console.log("I got a request!");
   console.log(req.body);
 
   // Get latitude, longitude and country from Geonames
   try {
-      const res = await fetch(baseURL + req.body.news + url + username);
-      let data = await res.json();
-      projectData = data;
+    const res = await fetch(baseURL + req.body.news + url + username);
+    let data = await res.json();
+    projectData = data;
   }
-  catch(error) {
-      console.log("error",error);
+  catch (error) {
+    console.log("error", error);
   }
 
   // The parts we need from the first API to proceed with the second
@@ -73,28 +72,26 @@ app.post("/api", async(req, res) => {
   let today = new Date();
   let distance = travelDate - today;
   let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  let weather;
 
   if (days < 7) {
 
     // Get the current weather and send back to client
     fetch(base1URL + lat + longurl + long + key)
-    .then(res => res.json())
-    .then((json) => {
+      .then(res => res.json())
+      .then((json) => {
 
-      const current = {
-        city: json.data[0].city_name,
-        description: json.data[0].weather.description,
-        temp: json.data[0].temp,
-        days: days + 1,
-      };
-      console.log(current);
-      res.send(current);
-    });
+        weather = {
+          city: json.data[0].city_name,
+          description: json.data[0].weather.description,
+          temp: json.data[0].temp,
+          days: days + 1,
+          // image: json.hits[0].webformatURL,
+        };
+        // res.send(current);
+        projectData["weather"] = weather;
 
-
-    // fetch(base3URL + pixKey + search + country + photo)
-    // .then(res => res.json())
-    // .then(data => console.log(data))
+      });
 
 
   } else {
@@ -102,19 +99,29 @@ app.post("/api", async(req, res) => {
     //Get predicted weather and send back to client
     console.log("nope");
     fetch(base2URL + lat + longurl + long + key)
-    .then(res => res.json())
-    .then((json) => {
-      const predicted = {
-        city: json.city_name,
-        description: json.data[8].weather.description,
-        temp: json.data[8].temp,
-        days: days + 1,
-      };
-      console.log(predicted);
-      res.send(predicted);
-    });
+      .then(res => res.json())
+      .then((json) => {
+        weather = {
+          city: json.city_name,
+          description: json.data[8].weather.description,
+          temp: json.data[8].temp,
+          days: days + 1,
+        };
+        // res.send(predicted);
+        projectData["weather"] = weather;
+      });
   }
 
+  return fetch(base3URL + pixKey + search + country + photo)
+    .then(res => res.json())
+    .then((json) => {
 
-}
-);
+      const images = {
+        image: json.hits[0].webformatURL,
+      };
+
+      projectData["images"] = images;
+      res.send(projectData);
+      console.log(projectData);
+    });
+});

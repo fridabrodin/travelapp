@@ -2,7 +2,7 @@
 const intro = document.getElementById("intro");
 const city = document.getElementById("city");
 const when = document.getElementById("when");
-const content = document.getElementById("content");
+const locationImage = document.getElementById("location-image");
 
 //Set value for travel date as the date of today
 document.getElementById("travel-date").valueAsDate = new Date();
@@ -36,8 +36,10 @@ async function handleSubmit(event) {
 
     //Update the UI with the information sent from the server
     intro.innerHTML = "Sounds fun! So, you are going to";
-    city.innerHTML = json.city + " in " + json.days + " days";
-    when.innerHTML = "Typical weather for then is: " + json.description + ", and about " + json.temp + "°C";
+    city.innerHTML = json.weather.city + " in " + json.weather.days + " days";
+    when.innerHTML = "Typical weather for then is: " + json.weather.description + ", and about " + json.weather.temp + "°C";
+    locationImage.src = json.images.image;
+
   } catch (error) {
     console.log(error);
   }
