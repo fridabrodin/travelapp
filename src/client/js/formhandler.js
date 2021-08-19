@@ -1,7 +1,7 @@
 // Our HTML elements
-const date = document.getElementById("date");
-const cityName = document.getElementById("city");
-const temp = document.getElementById("temp");
+const intro = document.getElementById("intro");
+const city = document.getElementById("city");
+const when = document.getElementById("when");
 const content = document.getElementById("content");
 
 //Set value for travel date as the date of today
@@ -33,13 +33,11 @@ async function handleSubmit(event) {
     //The data we are getting back from the server
     const json = await res.json();
     console.log(json);
-    let city = json.data[0].city_name;
-    let description = json.data[0].weather.description;
 
     //Update the UI with the information sent from the server
-    date.innerHTML = "Sounds fun! So, you are going to";
-    cityName.innerHTML = city;
-    temp.innerHTML = "The weather right now is: " + description;
+    intro.innerHTML = "Sounds fun! So, you are going to";
+    city.innerHTML = json.city + " in " + json.days + " days";
+    when.innerHTML = "Typical weather for then is: " + json.description + ", and about " + json.temp + "°C";
   } catch (error) {
     console.log(error);
   }

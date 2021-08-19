@@ -43,20 +43,20 @@ let base2URL = "https://api.weatherbit.io/v2.0/forecast/daily?&lat=";
 let longurl = "&lon=";
 const key = "&key=" + process.env.WEATHERBIT_KEY;
 
-
+// // What we need to create an URL from Pixabay API
+// let base3URL = "https://pixabay.com/api/?key=";
+// const pixKey = "&key=" + process.env.PIXABAY_KEY;
+// let search = "&q=";
+// let photo = "&image_type=photo";
 
 app.post("/api", async(req, res) => {
   console.log("I got a request!");
   console.log(req.body);
 
-  // fetch(baseURL + req.body.news + url + username)
-  // .then(res => res.json())
-  // .then(data => console.log(data));
-
+  // Get latitude, longitude and country from Geonames
   try {
       const res = await fetch(baseURL + req.body.news + url + username);
       let data = await res.json();
-      // console.log(data);
       projectData = data;
   }
   catch(error) {
@@ -68,53 +68,53 @@ app.post("/api", async(req, res) => {
   let long = projectData.geonames[0].lng;
   let country = projectData.geonames[0].countryName;
 
-  if (req.body.travelDate == "2021-08-18") {
+  //What we need for our countdown
+  let travelDate = new Date(req.body.travelDate);
+  let today = new Date();
+  let distance = travelDate - today;
+  let days = Math.floor(distance / (1000 * 60 * 60 * 24));
 
-    // Get the current weather
-    console.log("yes");
+  if (days < 7) {
+
+    // Get the current weather and send back to client
     fetch(base1URL + lat + longurl + long + key)
     .then(res => res.json())
-    .then(data => res.send(data));
+    .then((json) => {
+
+      const current = {
+        city: json.data[0].city_name,
+        description: json.data[0].weather.description,
+        temp: json.data[0].temp,
+        days: days + 1,
+      };
+      console.log(current);
+      res.send(current);
+    });
+
+
+    // fetch(base3URL + pixKey + search + country + photo)
+    // .then(res => res.json())
+    // .then(data => console.log(data))
+
 
   } else {
 
-    //Get predicted weather
+    //Get predicted weather and send back to client
     console.log("nope");
     fetch(base2URL + lat + longurl + long + key)
     .then(res => res.json())
-    .then(data => res.send(data));
-
+    .then((json) => {
+      const predicted = {
+        city: json.city_name,
+        description: json.data[8].weather.description,
+        temp: json.data[8].temp,
+        days: days + 1,
+      };
+      console.log(predicted);
+      res.send(predicted);
+    });
   }
+
 
 }
 );
-
-
-
-// // What we need to create an URL from the Weatherbit API : PREDICTED FORECAST
-// let base2URL = "https://api.weatherbit.io/v2.0/forecast/daily?&lat=";
-// let longurl = "&lon=";
-// const key = "&key=" + process.env.WEATHERBIT_KEY;
-// let lat = json.geonames[0].lat;
-// let long = json.geonames[0].lng;
-// let country = json.geonames[0].countryName;
-
-
-// fetch(base2URL + lat + longurl + long + key)
-// .then(res => res.json())
-// .then(data => console.log(data));
-
-
-
-
-  // if (req.body.travelDate == "2021-08-18") {
-
-  //   // Get the current weather
-  //   console.log("yes");
-
-  // } else {
-
-  //   //Get predicted weather
-  //   console.log("nope");
-
-  // }
