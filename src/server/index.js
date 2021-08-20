@@ -30,31 +30,20 @@ app.listen(8081, function () {
 // An empty JS object that will hold our data
 let projectData = {};
 
-// What we need to create an URL from the Geonames API
-let baseURL = "http://api.geonames.org/searchJSON?q=";
-const username = process.env.API_NAME;
-let url = "&maxRows=1&username=";
-
-
-// What we need to create an URL from the Weatherbit API : CURRENT AND PREDICTED FORECAST
-let base1URL = "https://api.weatherbit.io/v2.0/current?lat=";
-let base2URL = "https://api.weatherbit.io/v2.0/forecast/daily?&lat=";
-let longurl = "&lon=";
-const key = "&key=" + process.env.WEATHERBIT_KEY;
-
-// // What we need to create an URL from Pixabay API
-let base3URL = "https://pixabay.com/api/?key=";
+// Our API keys
+const geonamesUser = process.env.GEO_NAME;
 const pixKey = "&key=" + process.env.PIXABAY_KEY;
-let search = "&q=";
-let photo = "&image_type=photo";
+const weatherbitKey = process.env.WEATHERBIT_KEY;
 
+//Post route with API data
 app.post("/api", async (req, res) => {
   console.log("I got a request!");
   console.log(req.body);
+  const userInputCity = req.body.location;
 
   // Get latitude, longitude and country from Geonames
   try {
-    const res = await fetch(baseURL + req.body.news + url + username);
+    const res = await fetch(`http://api.geonames.org/searchJSON?q=${userInputCity}&maxRows=1&username=${geonamesUser}`);
     let data = await res.json();
     projectData = data;
   }
@@ -62,7 +51,7 @@ app.post("/api", async (req, res) => {
     console.log("error", error);
   }
 
-  // The parts we need from the first API to proceed with the second
+  //The parts we need from the first API to proceed with the second
   const lat = projectData.geonames[0].lat;
   let long = projectData.geonames[0].lng;
   let country = projectData.geonames[0].countryName;
@@ -77,7 +66,7 @@ app.post("/api", async (req, res) => {
   if (days < 7) {
 
     // Get the current weather and send back to client
-    fetch(base1URL + lat + longurl + long + key)
+    fetch(`https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${long}&key=${weatherbitKey}`)
       .then(res => res.json())
       .then((json) => {
 
@@ -86,9 +75,7 @@ app.post("/api", async (req, res) => {
           description: json.data[0].weather.description,
           temp: json.data[0].temp,
           days: days + 1,
-          // image: json.hits[0].webformatURL,
         };
-        // res.send(current);
         projectData["weather"] = weather;
 
       });
@@ -98,7 +85,7 @@ app.post("/api", async (req, res) => {
 
     //Get predicted weather and send back to client
     console.log("nope");
-    fetch(base2URL + lat + longurl + long + key)
+    fetch(`https://api.weatherbit.io/v2.0/forecast/daily?&lat=${lat}&lon=${long}&key=${weatherbitKey}`)
       .then(res => res.json())
       .then((json) => {
         weather = {
@@ -107,12 +94,12 @@ app.post("/api", async (req, res) => {
           temp: json.data[8].temp,
           days: days + 1,
         };
-        // res.send(predicted);
         projectData["weather"] = weather;
       });
   }
 
-  return fetch(base3URL + pixKey + search + country + photo)
+  //Pixabay images for the location
+  fetch(`https://pixabay.com/api/?key=${pixKey}&q=${userInputCity}&image_type=photo`)
     .then(res => res.json())
     .then((json) => {
 
@@ -121,6 +108,21 @@ app.post("/api", async (req, res) => {
       };
 
       projectData["images"] = images;
+    });
+
+    //Information about the country the user is going to
+    return fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+    .then(res => res.json())
+    .then((json) => {
+
+      const countryInfo = {
+        region: json[0].subregion,
+        country: json[0].name,
+        population: json[0].population,
+        flag: json[0].flag,
+      };
+
+      projectData["countryInfo"] = countryInfo;
       res.send(projectData);
       console.log(projectData);
     });
