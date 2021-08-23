@@ -1,5 +1,3 @@
-
-
 //Set value for travel date as the date of today
 document.getElementById("travel-date").valueAsDate = new Date();
 
