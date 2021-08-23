@@ -21,9 +21,13 @@ app.get('/', function (req, res) {
   res.sendFile('dist/index.html')
 })
 
-app.listen(8081, function () {
-  console.log('Example app listening on port 8081!')
+app.get('/test', async (req, res) => {
+  res.json({message: 'pass!'})
 })
+
+// app.listen(8081, function () {
+//   console.log('Example app listening on port 8081!')
+// })
 
 //------------------------------------------------------------------------------------------------------------------------
 
@@ -124,3 +128,5 @@ app.post("/api", async (req, res) => {
   }
 
 });
+
+module.exports = app

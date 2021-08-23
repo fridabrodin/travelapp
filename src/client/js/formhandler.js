@@ -1,5 +1,5 @@
-//Set value for travel date as the date of today
-document.getElementById("travel-date").valueAsDate = new Date();
+// //Set value for travel date as the date of today
+// document.getElementById("travel-date").valueAsDate = new Date();
 
 async function handleSubmit(event) {
   // event.preventDefault();
@@ -26,7 +26,6 @@ async function handleSubmit(event) {
   try {
     //The data we are getting back from the server
     const json = await res.json();
-    console.log(json);
 
     //Update the UI with the information sent from the server
     document.getElementById("intro").innerHTML = "You are going to " + json.weather.city + " in " + json.weather.days + " days!";
