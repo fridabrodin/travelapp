@@ -31,15 +31,17 @@ async function handleSubmit(event) {
     //Update the UI with the information sent from the server
     document.getElementById("intro").innerHTML = "You are going to " + json.weather.city + " in " + json.weather.days + " days!";
     document.getElementById("when").innerHTML = "Typical weather for then is: " + json.weather.description + ", and about " + json.weather.temp + "°C";
-    document.getElementById("countryinfo").innerHTML = json.weather.city + " is in " + json.countryInfo.country + ", " + json.countryInfo.region + ".";
     document.getElementById("location-image").src = json.images.image;
     document.querySelector("figcaption").innerHTML = "Photo from <a href=\"https://pixabay.com/\" target=\"_blank\">Pixabay.com</a>";
+    document.getElementById("countryinfo").innerHTML = json.weather.city + " is in " + json.countryInfo.country + ", " + json.countryInfo.region + ".";
 
   } catch (error) {
     console.log(error);
   }
 
 }
+
+
 
 export { handleSubmit }
 

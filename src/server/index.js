@@ -41,6 +41,17 @@ app.post("/api", async (req, res) => {
   console.log(req.body);
   const userInputCity = req.body.location;
 
+     //Pixabay images for the location
+     fetch(`https://pixabay.com/api/?key=${pixKey}&q=${userInputCity}&image_type=photo`)
+     .then(res => res.json())
+     .then((json) => {
+
+       const images = {
+         image: json.hits[0].webformatURL,
+       };
+       projectData["images"] = images;
+     });
+
   // Get latitude, longitude and country from Geonames
   try {
     const res = await fetch(`http://api.geonames.org/searchJSON?q=${userInputCity}&maxRows=1&username=${geonamesUser}`);
@@ -55,6 +66,19 @@ app.post("/api", async (req, res) => {
   const lat = projectData.geonames[0].lat;
   let long = projectData.geonames[0].lng;
   let country = projectData.geonames[0].countryName;
+
+    //Information about the country the user is going to
+    fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+    .then(res => res.json())
+    .then((json) => {
+      const countryInfo = {
+        region: json[0].subregion,
+        country: json[0].name,
+        population: json[0].population,
+        flag: json[0].flag,
+      };
+      projectData["countryInfo"] = countryInfo;
+    });
 
   //What we need for our countdown
   let travelDate = new Date(req.body.travelDate);
@@ -77,7 +101,7 @@ app.post("/api", async (req, res) => {
           days: days + 1,
         };
         projectData["weather"] = weather;
-
+        res.send(projectData);
       });
 
 
@@ -95,35 +119,8 @@ app.post("/api", async (req, res) => {
           days: days + 1,
         };
         projectData["weather"] = weather;
+        res.send(projectData);
       });
   }
 
-  //Pixabay images for the location
-  fetch(`https://pixabay.com/api/?key=${pixKey}&q=${userInputCity}&image_type=photo`)
-    .then(res => res.json())
-    .then((json) => {
-
-      const images = {
-        image: json.hits[0].webformatURL,
-      };
-
-      projectData["images"] = images;
-    });
-
-    //Information about the country the user is going to
-    return fetch(`https://restcountries.eu/rest/v2/name/${country}`)
-    .then(res => res.json())
-    .then((json) => {
-
-      const countryInfo = {
-        region: json[0].subregion,
-        country: json[0].name,
-        population: json[0].population,
-        flag: json[0].flag,
-      };
-
-      projectData["countryInfo"] = countryInfo;
-      res.send(projectData);
-      console.log(projectData);
-    });
 });
