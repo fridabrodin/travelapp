@@ -19,6 +19,10 @@ This project includes a simple form where the user enters the location they are 
 - REST Contries to get information about the different countries
 - Pixabay to get images of cities
 
+## Extended option
+
+- The choice of extended option for this project is the integration of the REST Countries API to pull in data for the country being visited
+
 ## Future development
 
 - Error handling
