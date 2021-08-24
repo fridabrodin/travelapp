@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto&display=swap');
+@import "media-queries.scss";
 
 body {
     font-family: "Open Sans", sans-serif;
@@ -14,15 +15,6 @@ body {
     justify-content: center;
     grid-gap: 1em;
     font-size: 20px;
-}
-
-.container {
-    background:rgba(0, 0, 0, 0.8);
-    width: 800px;
-    padding: 46px;
-    margin: 200px;
-    border-radius: 32px;
-    text-align:center;
 }
 
 h1 {
@@ -58,28 +50,11 @@ font-size: 12px;
     margin-bottom: 16px;
 }
 
-/*  Basic Styling To Override Default For Basic HTML Elements */
 label {
     display:block;
     font-size: 20px;
     font-weight: 600;
     font-family: "Open Sans", sans-serif;
-}
-
-input {
-    display:block;
-    height: 40px;
-    width: 300px;
-    background:#fff;
-    color: #6b6b6b;
-    font-size: 20px;
-    border-radius: 10px;
-    border: none;
-    margin: 16px 8px 16px 0;
-    padding: 8px;
-    text-align: center;
-    display: block;
-    float:left;
 }
 
 button {
@@ -148,41 +123,3 @@ button:focus {
 ::-ms-input-placeholder { /* Microsoft Edge */
     color: #878787;;
 }
-
-@media only screen and (max-width: 900px) {
-    .container {
-       width: 70%;
-       margin: 80px 0px 0px 0px;
-       text-align:center;
-       display: block;
-       margin-left: auto;
-       margin-right: auto;
-    }
-
-    input {
-        width: 100%;
-        margin: 16px 0 16px 0;
-        text-align: center;
-    }
-
-    .holder {
-        justify-content: center;
-    }
-
-  }
-
-  @media only screen and (min-width: 900px) {
-    #entryHolder {
-        width: 50%;
-        text-align: left;
-        float:left;
-    }
-    #imageholder {
-        width: 50%;
-        float: right;
-    }
-
-    #location-image {
-        width: 350px;
-    }
-    }
