@@ -15,7 +15,7 @@ module.exports = {
     },
     optimization: {
         minimizer: [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})],
-        },
+    },
     module: {
         rules: [
             {
@@ -30,15 +30,11 @@ module.exports = {
             {
                 test: /\.(png|jpe?g|gif)$/i,
                 use: [
-                  {
-                    loader: 'file-loader',
-                  },
+                    {
+                        loader: 'file-loader',
+                    },
                 ],
-              },
-              {
-                test: /\.(png|jpg)$/,
-                loader: 'url-loader'
-              }
+            }
         ]
     },
     plugins: [
